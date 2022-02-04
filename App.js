@@ -1,12 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
+import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
+import comicsReducer from './store/comics-reducer';
+import Database from './Database';
+import Main from './components/Main';
+
+const db = new Database();
+
+db.initDB().then(() => {
+    console.log('Initialized database...');
+}).catch(err => {
+    console.log('Intializing database failed.');
+    console.log(err);
+});
+
+const rootReducer = combineReducers({
+  comics: comicsReducer
+});
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <Main />
+    </Provider>
   );
 }
 
