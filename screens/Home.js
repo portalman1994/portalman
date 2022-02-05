@@ -1,23 +1,20 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Button, FlatList, Modal, SafeAreaView, StyleSheet, ScrollView, View, Text, SectionList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, FlatList, Modal, SafeAreaView, StyleSheet, ScrollView, View, Text } from 'react-native';
 import { Input } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ComicItem from '../components/ComicsItem';
 import * as comicsActions from '../store/comics-actions';
 import { useDispatch, useSelector } from 'react-redux';
-import Database from '../Database';
+import NavigationService from '../services/NavigationService';
 
-const db = new Database();
-
-const ComicsList = props => {
+const ComicsList = () => {
     const comics = useSelector(state => state.comics.comics);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(comicsActions.loadComics());
     }, [dispatch]);
-
     return (
         <FlatList
             data={comics}
@@ -28,9 +25,7 @@ const ComicsList = props => {
                     cover={itemData.item.cover}
                     title={itemData.item.title + ' #' + itemData.item.issue}
                     onSelect={() => {
-                        props.navigation.navigate('ComicsDetail', {
-                        
-                        });
+                        NavigationService.navigate('ComicDetail', { comicId: itemData.item.id });
                     }}
                 />
             )}
@@ -45,9 +40,9 @@ const Home = () => {
     const [date, setDate] = useState('');
     const [cover, setCover] = useState('');
     const [toggle, setToggle] = useState(false);
-
+    
     const dispatch = useDispatch();
-
+    
     const resetForm = () => {
         setTitle('');
         setIssue('');
@@ -69,8 +64,11 @@ const Home = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View>
+                <Text style={{fontSize: 20}}>Recently Added</Text>
+            </View>
             <ScrollView style={{flex: 1}}>
-                <ComicsList />
+                <ComicsList/>
             </ScrollView>
             <View>
                 <Modal

@@ -1,52 +1,49 @@
-import * as React from 'react';
+import React, { Component, useEffect } from 'react';
 import { View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createAppContainer, NavigationActions } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { createStackNavigator } from 'react-navigation-stack';
+import ComicDetail from '../screens/ComicDetail';
 import Home from '../screens/Home';
+import NavigationService from '../services/NavigationService';
 
+const HomeStackNavigator = createStackNavigator({
+    HomeScreen: {
+        screen: Home,
+        navigationOptions: {
+            title: 'Home'
+        }
+    },
+    ComicDetail: {
+        screen: ComicDetail,
+        navigationOptions: {
+            title: 'Comic'
+        }        
+    }
+});
 
-function HomeScreen({ navigation }) {
-    return <Home />;
-}
+const MainNavigator = createBottomTabNavigator(
+    {
+        Home: {
+            screen: HomeStackNavigator
+        },
 
-function CollectionScreen({ navigation }) {
-    return <View></View>;
-}
+    }
+);
 
-function WishlistScreen({ navigation }) {
-    return <View></View>;
-}
+const AppNavigator = createAppContainer(MainNavigator);
 
-const Tab = createBottomTabNavigator();
-
-function Main() {
-    return (
-        <NavigationContainer>
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => {
-                        let iconName;
-
-                        if (route.name === 'Home') {
-                            iconName = focused ? 'home' : 'home-outline';
-                        } else if(route.name === 'Collection') {
-                            iconName = focused ? 'book' : 'book-outline';
-                        } else if (route.name === 'Wishlist') {
-                            iconName = focused ? 'heart' : 'heart-outline';
-                        }
-
-                        return <Ionicons name={iconName} size={size} color={color} />;
-                    },
-                    tabBarActiveTintColor: 'steelblue',
-                    tabBarInactiveTintColor: 'slategray',
-                })}>
-                <Tab.Screen name='Home' component={HomeScreen} />
-                <Tab.Screen name='Collection' component={CollectionScreen} />
-                <Tab.Screen name='Wishlist' component={WishlistScreen} />
-            </Tab.Navigator>
-        </NavigationContainer>
-    );
+class Main extends Component {
+    render() {
+        return (
+        
+                <AppNavigator ref={navigatorRef => {
+                    NavigationService.setTopLevelNavigator(navigatorRef); }}/>
+            
+        );
+    }    
 }
 
 export default Main;
