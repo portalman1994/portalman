@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase('c.db');
+const db = SQLite.openDatabase('portalman.db');
 
 export default class Database {
 
@@ -73,12 +73,12 @@ export default class Database {
     }
 
     //edit comic from db
-    editComic(title, issue, desc, date, cover, id, wish) {
+    editComic(title, issue, desc, date, cover, wish, id) {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
                     `Update comics set title=?, issue=?, desc=?, date=?, cover=?, wish=? where id=?`, 
-                    [title, issue, desc, date, cover, id, wish],
+                    [title, issue, desc, date, cover, wish, id],
                     (_, result) => {
                         console.log(result);
                         resolve(result);

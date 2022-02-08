@@ -41,7 +41,7 @@ const Home = () => {
     const [date, setDate] = useState('');
     const [cover, setCover] = useState('');
     const [toggle, setToggle] = useState(false);
-    const [wish, setWish] = useState(0);
+    const [wish, setWish] = useState(false);
     
     const dispatch = useDispatch();
     
@@ -109,12 +109,14 @@ const Home = () => {
                             onChangeText={value => setCover(value)}
                             value={cover}
                         />
-                        <Switch
+                        <View style={{ flexDirection: 'row'}}><Text style={{fontSize: 17, margin: 5}}>Wishlist:   </Text>
+                        <Switch 
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
                             thumbColor={ wish ? "#f5dd4b" : "#f4f3f4" }
                             onValueChange={toggleSwitch}
                             value={wish}
                         />
+                        </View>
                     </View>
                     <View>
                         <Button

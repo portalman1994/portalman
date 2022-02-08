@@ -12,7 +12,7 @@ const ComicsList = () => {
     const comics = useSelector(state => state.comics.comics);
     const dispatch = useDispatch();
     let data = comics;
-    data = data.filter((item) => item.wish != 1).map(({id, cover, title, issue}) => ({id, cover, title, issue}));
+    data = data.filter((item) => item.wish == "0").map(({id, cover, title, issue}) => ({id, cover, title, issue}));
     useEffect(() => {
         dispatch(comicsActions.loadComics());
     }, [dispatch]);
@@ -36,11 +36,15 @@ const ComicsList = () => {
 }
 
 const Collection = () => {
+    const comics = useSelector(state => state.comics.comics);
+    let data = comics;
+    data = data.filter((item) => item.wish != 1).map(({id, cover, title, issue}) => ({id, cover, title, issue}));
+    let numOfComics = Object.keys(data).length;
 
     return (
         <SafeAreaView style={styles.container}>
             <View>
-                <Text style={{fontSize: 20}}>Comics</Text>
+                <Text style={{fontSize: 20}}>Comics: {numOfComics}</Text>
             </View>
             <ScrollView style={{flex: 1}}>
                 <ComicsList/>

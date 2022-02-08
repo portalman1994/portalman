@@ -39,7 +39,7 @@ export const loadComics = () => {
     }
 }
 
-export const editComic = (title, issue, desc, date, cover, id, wish) => {
+export const editComic = (title, issue, desc, date, cover, wish, id) => {
     return async dispatch => {
         const dbResult = await db.editComic(
             title,
@@ -47,8 +47,8 @@ export const editComic = (title, issue, desc, date, cover, id, wish) => {
             desc,
             date,
             cover,
-            id,
-            wish
+            wish,
+            id
         );
         console.log(dbResult);
         dispatch({

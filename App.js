@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, LogBox } from 'react-native';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
@@ -8,6 +8,7 @@ import Database from './Database';
 import Main from './components/Main';
 
 const db = new Database();
+LogBox.ignoreAllLogs();
 
 db.initDB().then(() => {
     console.log('Initialized database...');

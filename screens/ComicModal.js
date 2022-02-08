@@ -27,43 +27,50 @@ const ComicModal = props => {
     const dispatch = useDispatch();
     
     const toggleSwitch = () => {
-        setEditWish(!wish);
+        setEditWish(!Boolean(Number(wish)));
     };
 
     const comicsHandler = () => {
         dispatch(
-            comicsActions.editComic(title, issue, desc, date, cover, id, wish)
+            comicsActions.editComic(title, issue, desc, date, cover, wish, id)
         );
     };
     return (
         <ScrollView style={{flex: 1, padding: 10}}>
                     <View style={{flex: 1, padding: 10}}>
+                        <Text style={{fontSize: 20}}>Title</Text>
                         <TextInput
                             onChangeText={value => setEditTitle(value)}
                             value={title}
                         />
+                        <Text style={{fontSize: 20}}>Issue no.</Text>
                         <TextInput
                             onChangeText={value => setEditIssue(value)}
                             value={issue}
                         />
+                        <Text style={{fontSize: 20}}>Synopsis</Text>
                         <TextInput
                             onChangeText={value => setEditDesc(value)}
                             value={desc}
                         />
+                        <Text style={{fontSize: 20}}>Year</Text>
                         <TextInput
                             onChangeText={value => setEditDate(value)}
                             value={date}
                         />
+                        <Text style={{fontSize: 20}}>Cover</Text>
                         <TextInput
                             onChangeText={value => setEditCover(value)}
                             value={cover}
                         />
+                        <View style={{ flexDirection: 'row'}}><Text style={{fontSize: 17, margin: 5}}>Wishlist:   </Text>
                         <Switch
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
-                            thumbColor={ wish ? "#f5dd4b" : "#f4f3f4" }
+                            thumbColor={ Boolean(Number(wish)) ? "#f5dd4b" : "#f4f3f4" }
                             onValueChange={toggleSwitch}
-                            value={wish}
+                            value={Boolean(Number(wish))}
                         />
+                        </View>
                         </View>
                         <View>
                         <Button
