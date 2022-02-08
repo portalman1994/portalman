@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, Modal, SafeAreaView, StyleSheet, ScrollView, View, Text } from 'react-native';
+import { Button, FlatList, Modal, SafeAreaView, StyleSheet, ScrollView, View, Text, Switch } from 'react-native';
 import { Input } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -15,6 +15,7 @@ const ComicsList = () => {
     useEffect(() => {
         dispatch(comicsActions.loadComics());
     }, [dispatch]);
+
     return (
         <FlatList
             data={comics}
@@ -40,16 +41,22 @@ const Home = () => {
     const [date, setDate] = useState('');
     const [cover, setCover] = useState('');
     const [toggle, setToggle] = useState(false);
+    const [wish, setWish] = useState(0);
     
     const dispatch = useDispatch();
     
+    const toggleSwitch = () => {
+        setWish(!wish);
+    };
+
     const resetForm = () => {
         setTitle('');
         setIssue('');
         setDesc('');
         setDate('');
         setCover('');
-        toggleModal();
+        setWish(false);
+        toggleModal(false);
     }
 
     const toggleModal = () => {
@@ -58,7 +65,7 @@ const Home = () => {
 
     const comicsHandler = () => {
         dispatch(
-            comicsActions.addComic(title, issue, desc, date, cover)
+            comicsActions.addComic(title, issue, desc, date, cover, wish)
         );
     };
 
@@ -101,6 +108,12 @@ const Home = () => {
                             placeholder='Cover'
                             onChangeText={value => setCover(value)}
                             value={cover}
+                        />
+                        <Switch
+                            trackColor={{ false: "#767577", true: "#81b0ff" }}
+                            thumbColor={ wish ? "#f5dd4b" : "#f4f3f4" }
+                            onValueChange={toggleSwitch}
+                            value={wish}
                         />
                     </View>
                     <View>

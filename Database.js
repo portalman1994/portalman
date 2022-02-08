@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase('comics.db');
+const db = SQLite.openDatabase('c.db');
 
 export default class Database {
 
@@ -9,7 +9,7 @@ export default class Database {
         return new Promise((resolve, reject) => {
             db.transaction(                
                 function (tx) {
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS comics (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, issue INT NOT NULL, desc TEXT NOT NULL, date INT NOT NULL, cover TEXT NOT NULL)');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS comics (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, issue INT NOT NULL, desc TEXT NOT NULL, date INT NOT NULL, cover TEXT NOT NULL, wish TEXT NOT NULL)');
                 },
                 function (error) {
                     reject(error.message);
@@ -54,18 +54,13 @@ export default class Database {
         });
     }
 
-    //get comic by id
-    comicById(id) {
-
-    }
-
     //add comic to db
-    insertComic(title, issue, desc, date, cover) {
+    insertComic(title, issue, desc, date, cover, wish) {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    `INSERT INTO comics (title, issue, desc, date, cover) VALUES (?, ?, ?, ?, ?);`,
-                    [title, issue, desc, date, cover],
+                    `INSERT INTO comics (title, issue, desc, date, cover, wish) VALUES (?, ?, ?, ?, ?, ?);`,
+                    [title, issue, desc, date, cover, wish],
                     (_, result) => {
                         resolve(result);
                     },
@@ -78,8 +73,23 @@ export default class Database {
     }
 
     //edit comic from db
-    editComic(id, comic) {
+    editComic(title, issue, desc, date, cover, id, wish) {
+        return new Promise((resolve, reject) => {
+            db.transaction(tx => {
+                tx.executeSql(
+                    `Update comics set title=?, issue=?, desc=?, date=?, cover=?, wish=? where id=?`, 
+                    [title, issue, desc, date, cover, id, wish],
+                    (_, result) => {
+                        console.log(result);
+                        resolve(result);
+                    },
+                    (_, err) => {
+                        reject(err);
+                    }
 
+                );
+            });
+        });
     }
 
     //remove comic from db
